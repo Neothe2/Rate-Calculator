@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-// import firebase from 'firebase/compat/app'
-// import 'firebase/compat/auth';
-import * as firebase from 'firebase/compat';
+import firebase from 'firebase/compat/app';
+// import * as firebase from 'firebase/compat/app';
 
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import {
@@ -14,12 +13,13 @@ import {
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { User } from './user.model';
+import auth = firebase.auth;
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  user$: Observable<User>;
+  public user$: Observable<User>;
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -34,11 +34,11 @@ export class AuthService {
           return of(null);
         }
       })
-    );
+    ) as Observable<User>;
   }
 
   async googleSignin() {
-    const provider = new firebase.default.auth.GoogleAuthProvider();
+    const provider = new auth.GoogleAuthProvider();
     const credential = await this.afAuth.signInWithPopup(provider);
     return this.updateUserData(credential.user);
   }
@@ -57,7 +57,8 @@ export class AuthService {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
-      photoUrl: user.photoUrl,
+      isAdmin: false,
+      // photoUrl: user.photoUrl,
     };
 
     return userRef.set(data, { merge: true });
