@@ -56,7 +56,7 @@ export class AuthService {
     return userRef.set(data, { merge: true });
   }
 
-  canAccessCalcPage(user: User): boolean {
+  canAccessCalcPage(user: User) {
     const allowed = ['normal', 'admin'];
     return this.checkAuthorization(user, allowed);
   }
@@ -65,11 +65,12 @@ export class AuthService {
     return this.checkAuthorization(user, allowed);
   }
 
-  private checkAuthorization(user: User, allowedRoles: string[]): boolean {
+  private checkAuthorization(user: User, allowedRoles: string[]) {
     if (!user) return false;
     else
       for (const role of allowedRoles) {
         if (user.roles[role]) return true;
       }
+    return false;
   }
 }
