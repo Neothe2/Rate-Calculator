@@ -12,6 +12,6 @@ export class NavBarComponent implements OnInit {
 
   toggle() {
     var element = document.getElementById('nav');
-    element.classList.toggle('collapsible-expanded');
+    element.classList.toggle('collapsible--expanded');
   }
 }
