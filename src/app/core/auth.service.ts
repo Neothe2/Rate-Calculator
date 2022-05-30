@@ -11,6 +11,7 @@ import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { User } from '../models/user.model';
 import auth = firebase.auth;
+import { RecordService } from '../record.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -19,7 +20,8 @@ export class AuthService {
   constructor(
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
-    private router: Router
+    private router: Router,
+    private fs: RecordService
   ) {
     this.user$ = this.afAuth.authState.pipe(
       switchMap((user) => {
@@ -34,8 +36,16 @@ export class AuthService {
   async googleSignin() {
     const provider = new auth.GoogleAuthProvider();
     const credential = await this.afAuth.signInWithPopup(provider);
+    let users: User[];
+    this.fs
+      .getRecordList()
+      .valueChanges()
+      .subscribe((data) => (users = data));
+    console.log(users);
+
     return this.updateUserData(credential.user);
   }
+
   async signOut() {
     await this.afAuth.signOut();
     this.router.navigate(['/login']);
@@ -44,16 +54,28 @@ export class AuthService {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(
       `users/${user.uid}`
     );
-    const data = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      roles: {
-        normal: true,
-        admin: false,
-      },
-      // photoUrl: user.photoUrl,
-    };
+    let data;
+    if (user) {
+      data = {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        roles: {
+          normal: true,
+          admin: true,
+        },
+      };
+    } else {
+      data = {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        roles: {
+          normal: true,
+          admin: false,
+        },
+      };
+    }
     return userRef.set(data, { merge: true });
   }
 

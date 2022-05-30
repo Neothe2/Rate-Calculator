@@ -10,8 +10,7 @@
     <li><a href="#">Hosting</a></li>
   </ul>
 </nav> -->
-
-<nav class="nav collapsible" id="nav" (click)="toggle()">
+<nav class="nav collapsible" id="nav" (click)="toggle()" *ngIf="user">
   <a class="nav__brand" href="./index.html">
     <p>A3 panel rate calculator</p>
   </a>
@@ -19,10 +18,16 @@
     <use href="../../assets/images/sprite.svg#menu"></use>
   </svg>
   <ul class="list nav__list collapsible__content">
-    <li class="nav__item"><a href="#">Hosting</a></li>
-    <li class="nav__item"><a href="#">VPS</a></li>
-    <li class="nav__item"><a href="#">Domain</a></li>
-    <li class="nav__item"><a href="#">pricing</a></li>
+    <li class="nav__item" *ngIf="user && user.roles.admin">
+      <a href="admin">Admin Page</a>
+    </li>
+    <li class="nav__item" *ngIf="user && user.roles.admin">
+      <a href="user-management">Failure Management</a>
+    </li>
+    <li class="nav__item"><a href="#">Home</a></li>
+    <li class="nav__item">
+      <a href="login" (click)="auth.signOut()">Logout</a>
+    </li>
   </ul>
 </nav>
 
