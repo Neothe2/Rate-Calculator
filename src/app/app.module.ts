@@ -13,6 +13,8 @@ import { AdminGuard } from './core/admin-gaurd';
 import { LoginComponent } from './login/login.component';
 import { UserGuard } from './core/user.guard';
 import { UserManagementComponent } from './user-management/user-management.component';
+import { CommonModule } from '@angular/common';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
 
 @NgModule({
   declarations: [
@@ -21,11 +23,13 @@ import { UserManagementComponent } from './user-management/user-management.compo
     AdminPageComponent,
     LoginComponent,
     UserManagementComponent,
+    NavBarComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
+    CommonModule,
   ],
   providers: [AdminGuard, UserGuard],
   bootstrap: [AppComponent],

@@ -7,7 +7,7 @@ import {
   providedIn: 'root',
 })
 export class RecordService {
-  private dbPath = '/records';
+  private dbPath = '/users';
   recordRef: AngularFirestoreCollection<any>;
   constructor(private db: AngularFirestore) {
     this.recordRef = db.collection(this.dbPath);
